@@ -1,0 +1,19 @@
+# Rendered into RKE2 config as cloud-provider-config (kubelet external
+# cloud provider), mirroring the live cluster. NOTE: this embeds the
+# OpenStack password in the plan/state, same as the live cluster does.
+[Global]
+auth-url=${auth_url}
+username=${username}
+password=${password}
+tenant-id=${tenant_id}
+region=${region}
+domain-name=${domain_name}
+
+[LoadBalancer]
+subnet-id=${lb_subnet_id}
+
+[BlockStorage]
+ignore-volume-az=true
+
+[Route]
+router-id=${router_id}

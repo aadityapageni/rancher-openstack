@@ -1,0 +1,37 @@
+# Values mirror the live "rke2" cluster in this environment.
+# Copy to terraform.tfvars and fill in secrets (or prefer env vars:
+# TF_VAR_rancher_token, TF_VAR_openstack_password).
+rancher_url = "https://rancher.example.com"
+# rancher_token    = "token-xxxxx:yyyyyyyy"
+# openstack_password = "changeme"
+
+openstack_auth_url           = "http://192.168.10.100:5000/v3"
+openstack_username           = "admin"
+openstack_region             = "RegionOne"
+openstack_availability_zone  = ""
+openstack_domain_name        = "Default"
+openstack_user_domain_name   = ""
+openstack_project_name       = "admin"
+openstack_tenant_domain_name = ""
+openstack_tenant_id          = "36c1fc081a7e4821a95b5f0f96129293"
+openstack_router_id          = "f333d878-7f18-44d7-a869-5aa6ea39f39a"
+
+openstack_image_name       = "Ubuntu-26.04"
+openstack_flavor_name      = "t3.large"
+openstack_network_name     = "demo-net"
+openstack_endpoint_type    = "internalURL"
+openstack_keypair_name     = ""
+openstack_user_data_file   = ""
+openstack_security_groups  = "default"
+openstack_ssh_user         = "ubuntu"
+openstack_volume_size      = "50"
+openstack_volume_type      = ""
+openstack_floating_ip_pool = "public1"
+openstack_lb_subnet_id     = "30b404ea-1a99-4944-9ad7-7ba35f9ab945"
+
+cluster_name            = "rke2"
+rke2_version            = "v1.36.4+rke2r1"
+node_count              = 1
+cloud_credential_name   = "openstack-prod"
+node_dns_servers        = ["192.168.10.57", "8.8.8.8"]
+etcd_snapshot_schedule_cron = "0 * * * *"

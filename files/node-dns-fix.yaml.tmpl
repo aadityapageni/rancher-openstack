@@ -1,0 +1,50 @@
+# Replaces the systemd-resolved stub /etc/resolv.conf (a symlink to
+# 127.0.0.53, unreachable from pod network namespaces, which breaks
+# CoreDNS upstream resolution) with a static file pointing at real DNS.
+# Runs hostNetworked (no CNI needed), tolerates all taints, idempotent.
+# Delivered via machineSelectorFiles into RKE2 auto-manifests, so it runs
+# on first boot before Cilium/CoreDNS, and again on every reboot.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-dns-fix
+  namespace: kube-system
+  labels:
+    app: node-dns-fix
+spec:
+  selector:
+    matchLabels:
+      app: node-dns-fix
+  template:
+    metadata:
+      labels:
+        app: node-dns-fix
+    spec:
+      hostNetwork: true
+      priorityClassName: system-node-critical
+      tolerations:
+        - operator: Exists
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+        - name: fix
+          image: busybox:1
+          command:
+            - sh
+            - -c
+            - |
+              rm -f /host-etc/resolv.conf
+              printf ${nameservers_printf} > /host-etc/resolv.conf
+              chmod 644 /host-etc/resolv.conf
+              sleep infinity
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+          volumeMounts:
+            - mountPath: /host-etc
+              name: host-etc
+      volumes:
+        - name: host-etc
+          hostPath:
+            path: /etc

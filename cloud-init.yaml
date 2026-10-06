@@ -1,0 +1,12 @@
+#cloud-config
+# Referenced by openstack_config.user_data_file in machine-config.tf.
+# Keep this minimal: Rancher/RKE2 handles Kubernetes bootstrap.
+# Use this for SSH hardening, package updates, MTU fixes, etc.
+manage_etc_hosts: true
+ssh_pwauth: false
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+runcmd:
+  - echo "rancher-openstack node booted $(date -u --iso-8601=seconds)" > /var/log/rancher-provision.log
